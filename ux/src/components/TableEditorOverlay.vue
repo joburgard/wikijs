@@ -34,20 +34,20 @@ q-layout(view='hHh lpR fFf', container)
         :disabled='state.loading > 0'
       )
   q-page-container
-    q-page.q-pa-md
-      div(ref='tblRef')
+    q-page(padding)
+      div(class='row nowrap justify-center')
+        div
+          div(ref='tblRef')
 
       q-inner-loading(:showing='state.loading > 0')
         q-spinner(color='accent', size='lg')
 </template>
 
 <script setup>
-import { useI18n } from 'vue-i18n'
 import { useQuasar } from 'quasar'
+import { EditModule, FormatModule, FrozenColumnsModule, MoveColumnsModule, MoveRowsModule, Tabulator } from 'tabulator-tables'
 import { onMounted, reactive, ref } from 'vue'
-import { Tabulator } from 'tabulator-tables'
-import gql from 'graphql-tag'
-import { cloneDeep } from 'lodash-es'
+import { useI18n } from 'vue-i18n'
 
 import { useSiteStore } from 'src/stores/site'
 
@@ -79,9 +79,30 @@ function close () {
 }
 
 onMounted(() => {
+  const tabledata = [
+    { id: 1, name: 'Oli Bob', progress: 12, gender: 'male', rating: 1, col: 'red', dob: '19/02/1984', car: 1 },
+    { id: 2, name: 'Mary May', progress: 1, gender: 'female', rating: 2, col: 'blue', dob: '14/05/1982', car: true },
+    { id: 3, name: 'Christine Lobowski', progress: 42, gender: 'female', rating: 0, col: 'green', dob: '22/05/1982', car: 'true' },
+    { id: 4, name: 'Brendon Philips', progress: 100, gender: 'male', rating: 1, col: 'orange', dob: '01/08/1980' },
+    { id: 5, name: 'Margret Marmajuke', progress: 16, gender: 'female', rating: 5, col: 'yellow', dob: '31/01/1999' },
+    { id: 6, name: 'Frank Harbours', progress: 38, gender: 'male', rating: 4, col: 'red', dob: '12/05/1966', car: 1 }
+  ]
+
+  Tabulator.registerModule([EditModule, MoveRowsModule, MoveColumnsModule, FormatModule, FrozenColumnsModule])
+
   const tbl = new Tabulator(tblRef.value, {
+    data: tabledata,
     clipboard: true,
-    height: '100%'
+    height: '100%',
+    autoResize: true,
+    layout: 'fitDataTable',
+    movableColumns: true,
+    movableRows: true,
+    columns: [
+      { rowHandle: true, formatter: 'handle', headerSort: false, frozen: true, width: 30, minWidth: 30 },
+      { title: 'id', field: 'id', editor: 'input' },
+      { title: 'Name', field: 'name', editor: 'input', validator: 'required' }
+    ]
   })
 })
 </script>
