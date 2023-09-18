@@ -256,13 +256,13 @@
 </template>
 
 <script setup>
-import { reactive, ref, shallowRef, nextTick, onMounted, watch, onBeforeUnmount } from 'vue'
-import { useMeta, useQuasar, setCssVar } from 'quasar'
-import { useI18n } from 'vue-i18n'
-import { find, get, last, times, startsWith, debounce } from 'lodash-es'
+import { debounce, find, get, last, startsWith, times } from 'lodash-es'
 import { DateTime } from 'luxon'
 import * as monaco from 'monaco-editor'
-import { Position, Range } from 'monaco-editor'
+import { Range } from 'monaco-editor'
+import { useQuasar } from 'quasar'
+import { nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { useCommonStore } from 'src/stores/common'
 import { useEditorStore } from 'src/stores/editor'
@@ -328,6 +328,10 @@ function insertTable () {
   siteStore.$patch({
     overlay: 'TableEditor'
   })
+}
+
+function insertTableValue (content) {
+  insertAfter({ content, newLine: true })
 }
 
 /**
@@ -699,6 +703,7 @@ onMounted(async () => {
   EVENT_BUS.on('insertAsset', insertAssetClb)
   EVENT_BUS.on('openEditorSettings', openEditorSettings)
   EVENT_BUS.on('reloadEditorContent', reloadEditorContent)
+  EVENT_BUS.on('insertTableValue', insertTableValue)
 
   // this.$root.$on('editorInsert', opts => {
   //   switch (opts.kind) {
@@ -737,6 +742,7 @@ onBeforeUnmount(() => {
   EVENT_BUS.off('insertAsset', insertAssetClb)
   EVENT_BUS.off('openEditorSettings', openEditorSettings)
   EVENT_BUS.off('reloadEditorContent', reloadEditorContent)
+  EVENT_BUS.off('insertTable', insertTableValue)
   if (editor) {
     editor.dispose()
   }

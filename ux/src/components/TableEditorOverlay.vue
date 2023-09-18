@@ -32,6 +32,7 @@ q-layout(view='hHh lpR fFf', container)
         :aria-label='t(`common.actions.save`)'
         icon='las la-check'
         :disabled='state.loading > 0'
+        @click='save'
       )
   q-page-container
     q-page(padding)
@@ -71,11 +72,17 @@ const state = reactive({
   loading: 0
 })
 const tblRef = ref(null)
+let table
 
 // METHODS
 
 function close () {
   siteStore.$patch({ overlay: '' })
+}
+
+function save () {
+  EVENT_BUS.emit('insertTableValue', table.getData())
+  close()
 }
 
 onMounted(() => {
@@ -90,7 +97,7 @@ onMounted(() => {
 
   Tabulator.registerModule([EditModule, MoveRowsModule, MoveColumnsModule, FormatModule, FrozenColumnsModule])
 
-  const tbl = new Tabulator(tblRef.value, {
+  table = new Tabulator(tblRef.value, {
     data: tabledata,
     clipboard: true,
     height: '100%',
