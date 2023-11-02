@@ -81,7 +81,31 @@ function close () {
 }
 
 function save () {
-  EVENT_BUS.emit('insertTableValue', table.getData())
+  const columns = table.getColumns()
+
+  let columnTitles = ''
+  let columnBars = ''
+  const columnFields = []
+  for (const columnProxy of columns) {
+    const column = columnProxy.getDefinition()
+
+    if (column.title) {
+      columnTitles += `|${column.title}`
+      columnBars += '|-'
+      columnFields.push(column.field)
+    }
+  }
+
+  const data = table.getData()
+  let rows = ''
+  for (const item of data) {
+    const values = columnFields.map(field => item[field]).join('|')
+    rows += `\n|${values}|`
+  }
+
+  const markdown = `${columnTitles}|\n${columnBars}|${rows}`
+
+  EVENT_BUS.emit('insertTableValue', markdown)
   close()
 }
 

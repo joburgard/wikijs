@@ -331,6 +331,7 @@ function insertTable () {
 }
 
 function insertTableValue (content) {
+  // TODO https://www.npmjs.com/package/markdown-table-prettify
   insertAfter({ content, newLine: true })
 }
 
