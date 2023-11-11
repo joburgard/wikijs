@@ -295,6 +295,9 @@ devDependencies:
   '@types/lodash':
     specifier: 4.14.200
     version: 4.14.200
+  '@types/tabulator-tables':
+    specifier: 5.4.10
+    version: 5.4.10
   '@vue/language-plugin-pug':
     specifier: 1.8.19
     version: 1.8.19
@@ -1275,6 +1278,10 @@ packages:
       '@types/http-errors': 2.0.2
       '@types/mime': 3.0.2
       '@types/node': 20.8.3
+    dev: true
+
+  /@types/tabulator-tables@5.4.10:
+    resolution: {integrity: sha512-ale/wbhA7zsmSSz6lTnxferRCCbKq3oZtxaNY8osb7YND2k27ZlEhfZzlVfRq8b5t7shhP8M53HyAgm1M0O+FA==}
     dev: true
 
   /@types/throttle-debounce@2.1.0:
