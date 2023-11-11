@@ -38,7 +38,35 @@ q-layout(view='hHh lpR fFf', container)
     q-page(padding)
       div(class='row nowrap justify-center')
         div
-          div(ref='tblRef')
+          div
+            q-btn-group(push)
+              q-btn(
+                push
+                color='white'
+                text-color='grey-7'
+                icon='mdi-table-column-plus-after'
+                @click='addColumn'
+              )
+              q-btn(
+                push
+                color='white'
+                text-color='grey-7'
+                icon='mdi-table-row-plus-after'
+                @click='addRow'
+              )
+              q-btn(
+                push
+                color='white'
+                text-color='grey-7'
+                icon='mdi-table-column-remove'
+              )
+              q-btn(
+                push
+                color='white'
+                text-color='grey-7'
+                icon='mdi-table-row-remove'
+              )
+          div.q-mt-md(ref='tblRef')
 
       q-inner-loading(:showing='state.loading > 0')
         q-spinner(color='accent', size='lg')
@@ -75,6 +103,14 @@ const tblRef = ref(null)
 let table
 
 // METHODS
+
+function addColumn () {
+  table.addColumn({ title: 'New', field: 'new', editor: 'input', editableTitle: true })
+}
+
+function addRow () {
+  table.addRow({})
+}
 
 function close () {
   siteStore.$patch({ overlay: '' })
@@ -131,8 +167,8 @@ onMounted(() => {
     movableRows: true,
     columns: [
       { rowHandle: true, formatter: 'handle', headerSort: false, frozen: true, width: 30, minWidth: 30 },
-      { title: 'id', field: 'id', editor: 'input' },
-      { title: 'Name', field: 'name', editor: 'input', validator: 'required' }
+      { title: 'id', field: 'id', editor: 'input', editableTitle: true },
+      { title: 'Name', field: 'name', editor: 'input', validator: 'required', editableTitle: true }
     ]
   })
 })
